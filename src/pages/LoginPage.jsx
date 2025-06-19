@@ -15,13 +15,24 @@ const LoginPage = () => {
   const authError = useAuthStore((state) => state.error);
   const user = useAuthStore((state) => state.user);
 
+  const onSubmit = (data) => {
+    login(data.username);
+  };
+
+  if (user) {
+    return <Navigate to="/" />;
+  }
+
   return (
     <div>
-      <h2>Iniciar sesion</h2>
-      <form>
+      <h2 className="text-xl text-center font-semibold text-blue-800">
+        Iniciar sesion
+      </h2>
+      <form onSubmit={handleSubmit(onSubmit)}>
         <div>
           <label htmlFor="">Nombre de usuario:</label>
           <input
+            className="border border-slate-300 rounded-lg ml-1"
             type="text"
             placeholder="Ejemplo Bret"
             {...register("username", {
@@ -30,8 +41,14 @@ const LoginPage = () => {
           />
           {errors.username && <p>{errors.username.message}</p>}
         </div>
-        <button type="submit">{loading ? "Cargando" : "Enviar"}</button>
+        <button
+          type="submit"
+          className="bg-blue-800 text-white font-semibold px-2 rounded-lg"
+        >
+          {loading ? "Cargando" : "Enviar"}
+        </button>
       </form>
+      {authError && <p>Error: {authError}</p>}
     </div>
   );
 };
